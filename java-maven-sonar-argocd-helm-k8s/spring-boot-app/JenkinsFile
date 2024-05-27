@@ -1,11 +1,17 @@
 pipeline {
   agent {
-    docker {
-      sh 'chmod 777 -R /var/run/docker.sock' 
+    docker { 
       image 'rajkumar1176/abhisheckcicd:v1'
       args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
     }
   }
+  stages {
+    stage('Prepare Environment') {
+      steps {
+        // Ensure the Docker socket has the correct permissions
+        sh 'chmod 777 -R /var/run/docker.sock'
+      }
+    }
   stages {
     stage('Checkout') {
       steps {
